@@ -1,5 +1,7 @@
 package com.coderman.sell.modal;
 
+import com.coderman.sell.myenums.OrderStatusEnum;
+import com.coderman.sell.myenums.PayStatusEnum;
 import lombok.Data;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -35,11 +37,11 @@ public class OrderMaster {
     /**总金额*/
     private BigDecimal orderAmount;
 
-    /**订单状态*/
-    private Integer orderStatus=0;
+    /**订单状态: 默认的订单状态是新订单*/
+    private Integer orderStatus= OrderStatusEnum.CREATE_ORDER.getCode();
 
-    /**支付状态*/
-    private Integer payStatus=0;
+    /**支付状态：默认订单的支付状态是未支付*/
+    private Integer payStatus= PayStatusEnum.NOT_PAID.getCode();
 
     private Date createTime;
 

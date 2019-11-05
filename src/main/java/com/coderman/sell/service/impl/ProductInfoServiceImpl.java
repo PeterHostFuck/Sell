@@ -7,6 +7,7 @@ import com.coderman.sell.modal.ProductInfo;
 import com.coderman.sell.myenums.ProductStatusEnum;
 import com.coderman.sell.myenums.ResultEnum;
 import com.coderman.sell.service.ProductInfoService;
+import org.apache.tomcat.util.http.fileupload.util.LimitedInputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,7 +49,16 @@ public class ProductInfoServiceImpl implements ProductInfoService {
 
     @Override
     public void increaseStock(List<OrderItem> list) {
-
+        for (OrderItem orderItem : list) {
+            String productId = orderItem.getProductId();
+            ProductInfo byProductId = repository.findByProductId(productId);
+            if(byProductId==null){
+                throw new SellException(ResultEnum.PRODUCT_NOT_EXIST);
+            }
+            Integer result=byProductId.getProductStock()+orderItem.getProductQuantity();
+            byProductId.setProductStock(result);
+            repository.save(byProductId);
+        }
     }
 
     @Transactional
